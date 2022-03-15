@@ -1,0 +1,33 @@
+{
+	"name": "tplink-taposmartplug",
+	"version": "1.0.0",
+	"api_version": "1.0",
+	"keywords": [
+		"plug",
+		"tapo",
+		"outlet"
+	],
+	"manufacturer": "TP-Link",
+	"product": [
+		"Tapo Smart Plug"
+	],
+	"shortname": "tplink-kasasmartplug",
+	"description": "Companion module for TP-Link Tapo Smart Plugs",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Joseph Adams <josephdadams@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/bitfocus/companion-module-tplink-taposmartplug#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-tplink-taposmartplug/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-tplink-taposmartplug.git"
+	},
+	"dependencies": {
+		"tp-link-tapo-connect": "^1.0.6"
+	}
+}

@@ -11,7 +11,7 @@ module.exports = {
 		const backgroundColorGreen = self.rgb(0, 255, 0) // Green
 		const backgroundColorOrange = self.rgb(255, 102, 0) // Orange
 
-		/*feedbacks.powerState = {
+		feedbacks.powerState = {
 			type: 'boolean',
 			label: 'Power State',
 			description: 'Indicate if Plug is On or Off',
@@ -35,7 +35,7 @@ module.exports = {
 				let opt = feedback.options;
 
 				if (self.PLUGINFO) {
-					let plug_state = self.PLUGINFO.relay_state;
+					let plug_state = self.PLUGINFO.device_on;
 				
 					if (plug_state == opt.option) {
 						return true;
@@ -44,7 +44,7 @@ module.exports = {
 
 				return false
 			}
-		}*/
+		}
 
 		return feedbacks
 	}

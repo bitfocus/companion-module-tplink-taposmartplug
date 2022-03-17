@@ -11,7 +11,7 @@
 	"product": [
 		"Tapo Smart Plug"
 	],
-	"shortname": "tplink-kasasmartplug",
+	"shortname": "tplink-taposmartplug",
 	"description": "Companion module for TP-Link Tapo Smart Plugs",
 	"main": "src/index.js",
 	"scripts": {

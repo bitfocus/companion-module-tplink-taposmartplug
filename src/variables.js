@@ -51,7 +51,7 @@ module.exports = {
 			self.setVariable('oem_id', self.PLUGINFO.oem_id);
 
 			self.setVariable('on_time', self.PLUGINFO.on_time);
-			self.setVariable('overheated', (self.PLUGINFO.overheated == true ? 'On' : 'Off'));
+			self.setVariable('overheated', (self.PLUGINFO.overheated == true ? 'Yes' : 'No'));
 			self.setVariable('nickname', self.PLUGINFO.nickname);
 			self.setVariable('location', self.PLUGINFO.location);
 

@@ -17,7 +17,7 @@ instance.prototype.PLUGINFO = {
 	mac: '',
 
 	hw_id: '',
-	hw_id: '',
+	fw_id: '',
 	oem_id: '',
 
 	on_time:  '',
@@ -129,6 +129,13 @@ instance.prototype.stopInterval = function () {
 	}
 };
 
+instance.prototype.restartInterval = function() {
+	let self = this;
+
+	self.status(self.STATUS_OK);
+	self.setupInterval();
+};
+
 instance.prototype.handleError = function(err) {
 	let self = this;
 
@@ -146,6 +153,7 @@ instance.prototype.handleError = function(err) {
 					error = 'Unable to communicate with Device. Connection refused. Is this the right IP address? Is it still online?';
 					self.log('error', error);
 					self.status(self.STATUS_ERROR);
+					setTimeout(self.restartInterval.bind(self), 30000); //restart interval after 30 seconds
 					break;
 			}
 		}

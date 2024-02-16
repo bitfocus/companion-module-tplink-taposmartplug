@@ -1,10 +1,12 @@
+const { combineRgb } = require('@companion-module/base');
+
 module.exports = {
-	setPresets: function () {
+	initPresets: function () {
 		let self = this;
 		let presets = [];
 
-		const foregroundColor = self.rgb(255, 255, 255) // White
-		const backgroundColorRed = self.rgb(255, 0, 0) // Red
+		const foregroundColor = combineRgb(255, 255, 255) // White
+		const backgroundColorRed = combineRgb(255, 0, 0) // Red
 
 		// ########################
 		// #### Power Presets ####
@@ -12,22 +14,27 @@ module.exports = {
 
 		presets.push({
 			category: 'Power',
-			label: 'Power On',
-			bank: {
-				style: 'text',
+			type: 'button',
+			name: 'Power On',
+			style: {
 				text: 'Power\\nON',
 				size: '14',
 				color: '16777215',
-				bgcolor: self.rgb(0, 0, 0),
+				bgcolor: combineRgb(0, 0, 0),
 			},
-			actions: [
+			steps: [
 				{
-					action: 'on'
+					down: [
+						{
+							actionId: 'on'
+						}
+					],
+					up: []
 				}
 			],
 			feedbacks: [
 				{
-					type: 'powerState',
+					feedbackId: 'powerState',
 					options: {
 						option: 1
 					},
@@ -41,22 +48,27 @@ module.exports = {
 
 		presets.push({
 			category: 'Power',
-			label: 'Power Off',
-			bank: {
-				style: 'text',
+			type: 'button',
+			name: 'Power Off',
+			style: {
 				text: 'Power\\nOFF',
 				size: '14',
 				color: '16777215',
-				bgcolor: self.rgb(0, 0, 0),
+				bgcolor: combineRgb(0, 0, 0),
 			},
-			actions: [
+			steps: [
 				{
-					action: 'off'
+					down: [
+						{
+							actionId: 'off'
+						}
+					],
+					up: []
 				}
 			],
 			feedbacks: [
 				{
-					type: 'powerState',
+					feedbackId: 'powerState',
 					options: {
 						option: 0
 					},
@@ -68,6 +80,6 @@ module.exports = {
 			]
 		})
 	
-		return presets;
+		self.setPresetDefinitions(presets);
 	}
 }

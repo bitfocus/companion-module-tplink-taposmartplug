@@ -1,19 +1,16 @@
+const { combineRgb } = require('@companion-module/base');
+
 module.exports = {
-	// ##########################
-	// #### Define Feedbacks ####
-	// ##########################
-	setFeedbacks: function () {
+	initFeedbacks: function () {
 		let self = this;
 		let feedbacks = {};
 
-		const foregroundColor = self.rgb(255, 255, 255) // White
-		const backgroundColorRed = self.rgb(255, 0, 0) // Red
-		const backgroundColorGreen = self.rgb(0, 255, 0) // Green
-		const backgroundColorOrange = self.rgb(255, 102, 0) // Orange
+		const foregroundColor = combineRgb(255, 255, 255) // White
+		const backgroundColorRed = combineRgb(255, 0, 0) // Red
 
 		feedbacks.powerState = {
 			type: 'boolean',
-			label: 'Power State',
+			name: 'Power State',
 			description: 'Indicate if Plug is On or Off',
 			style: {
 				color: foregroundColor,
@@ -46,6 +43,6 @@ module.exports = {
 			}
 		}
 
-		return feedbacks
+		self.setFeedbackDefinitions(feedbacks);
 	}
 }

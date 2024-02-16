@@ -1,33 +1,20 @@
 {
 	"name": "tplink-taposmartplug",
-	"version": "1.0.2",
-	"api_version": "1.0",
-	"keywords": [
-		"plug",
-		"tapo",
-		"outlet"
-	],
-	"manufacturer": "TP-Link",
-	"product": [
-		"Tapo Smart Plug"
-	],
-	"shortname": "tplink-taposmartplug",
-	"description": "Companion module for TP-Link Tapo Smart Plugs",
+	"version": "2.0.0",
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Joseph Adams <josephdadams@gmail.com>",
 	"license": "MIT",
-	"homepage": "https://github.com/bitfocus/companion-module-tplink-taposmartplug#readme",
-	"bugs": {
-		"url": "https://github.com/bitfocus/companion-module-tplink-taposmartplug/issues"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/bitfocus/companion-module-tplink-taposmartplug.git"
 	},
 	"dependencies": {
-		"tp-link-tapo-connect": "^1.0.6"
+		"@companion-module/base": "~1.7.0",
+		"tp-link-tapo-connect": "^2.0.0"
+	},
+	"devDependencies": {
+		"@companion-module/tools": "^1.5.0"
 	}
 }

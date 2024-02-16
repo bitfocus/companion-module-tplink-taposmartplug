@@ -1,10 +1,12 @@
 # TP-Link Tapo Smart Plug
 
-This module controls TP-Link Tapo Smart Plugs.
+This module controls TP-Link Tapo Smart Plugs and Bulbs.
 
 ## Actions:
 
 * Power On/Off
+* Set Bulb Brightness
+* Set Bulb Color
 
 ## Feedbacks:
 

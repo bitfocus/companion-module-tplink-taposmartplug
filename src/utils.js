@@ -8,6 +8,9 @@ module.exports = {
 	
 		if (self.config.host) {
 			try {
+				const cloudApi = await TAPO.cloudLogin(self.config.email, self.config.password);
+				const devices = await cloudApi.listDevices();
+				console.log(devices);
 				self.DEVICE = await TAPO.loginDeviceByIp(self.config.email, self.config.password, self.config.host);
 				if (self.DEVICE) {
 					self.updateStatus(InstanceStatus.Ok);
@@ -16,6 +19,8 @@ module.exports = {
 				}
 			}
 			catch(error) {
+				console.log('initLogin error:');
+				console.log(error);
 				self.handleError(error);
 			}
 		}
@@ -77,8 +82,12 @@ module.exports = {
 	
 		self.log('error', 'Stopping Update interval due to error.');
 		self.stopInterval();
+
+		console.log(err);
 	
 		let error = err.toString();
+
+		console.log(error);
 
 		try {	
 			Object.keys(err).forEach(function(key) {
@@ -98,6 +107,7 @@ module.exports = {
 		}
 		catch(error) {
 			//error handling the error, just show generic error
+			console.log(error);
 			self.log('error', error);
 		}
 	},
@@ -137,6 +147,8 @@ module.exports = {
 		}
 		catch(error) {
 			//error setting data
+			console.log('error settting data');
+			console.log(error);
 		}
 	},
 

@@ -17,6 +17,18 @@ module.exports = {
 			}
 		}
 
+		actions.toggle = {
+			name: 'Toggle Power',
+			callback: function (action, bank) {
+				if (self.PLUGINFO.device_on == 1) {
+					self.power(0);
+				}
+				else {
+					self.power(1);
+				}
+			}
+		}
+
 		actions.bulbBrightness = {
 			name: 'Set Bulb Brightness',
 			options: [

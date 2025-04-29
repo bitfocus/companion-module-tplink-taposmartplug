@@ -15,18 +15,12 @@
 	],
 	"legacyIds": [],
 	"runtime": {
-		"type": "node18",
+		"type": "node22",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
-		"entrypoint": "../index.js"
+		"entrypoint": "../src/main.js"
 	},
 	"manufacturer": "TP-Link",
-	"products": [
-		"Tapo Smart Plug"
-	],
-	"keywords": [
-		"plug",
-		"tapo",
-		"outlet"
-	]
+	"products": ["Tapo Smart Plug"],
+	"keywords": ["plug", "tapo", "outlet"]
 }

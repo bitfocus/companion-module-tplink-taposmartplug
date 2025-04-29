@@ -1,17 +1,18 @@
 // TP-Link Tapo Smart Plug
+// @ts-check
 
-const { InstanceBase, InstanceStatus, runEntrypoint } = require('@companion-module/base')
-const UpgradeScripts = require('./upgrades')
+import { InstanceBase, InstanceStatus, runEntrypoint } from '@companion-module/base'
+import UpgradeScripts from './upgrades.js'
 
-const config = require('./config')
-const actions = require('./actions')
-const feedbacks = require('./feedbacks')
-const variables = require('./variables')
-const presets = require('./presets')
+import config from './config.js'
+import actions from './actions.js'
+import feedbacks from './feedbacks.js'
+import variables from './variables.js'
+import presets from './presets.js'
 
-const utils = require('./utils')
+import utils from './utils.js'
 
-class tapoInstance extends InstanceBase {
+class TapoInstance extends InstanceBase {
 	constructor(internal) {
 		super(internal)
 
@@ -81,4 +82,4 @@ class tapoInstance extends InstanceBase {
 	}
 }
 
-runEntrypoint(tapoInstance, UpgradeScripts)
+runEntrypoint(TapoInstance, UpgradeScripts)

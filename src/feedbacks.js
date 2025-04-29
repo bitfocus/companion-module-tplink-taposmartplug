@@ -1,9 +1,9 @@
-const { combineRgb } = require('@companion-module/base');
+import { combineRgb } from '@companion-module/base'
 
-module.exports = {
+export default {
 	initFeedbacks: function () {
-		let self = this;
-		let feedbacks = {};
+		let self = this
+		let feedbacks = {}
 
 		const foregroundColor = combineRgb(255, 255, 255) // White
 		const backgroundColorRed = combineRgb(255, 0, 0) // Red
@@ -24,25 +24,25 @@ module.exports = {
 					default: 1,
 					choices: [
 						{ id: 0, label: 'Off' },
-						{ id: 1, label: 'On' }
-					]
-				}
+						{ id: 1, label: 'On' },
+					],
+				},
 			],
 			callback: function (feedback, bank) {
-				let opt = feedback.options;
+				let opt = feedback.options
 
 				if (self.PLUGINFO) {
-					let plug_state = self.PLUGINFO.device_on;
-				
+					let plug_state = self.PLUGINFO.device_on
+
 					if (plug_state == opt.option) {
-						return true;
+						return true
 					}
 				}
 
 				return false
-			}
+			},
 		}
 
-		self.setFeedbackDefinitions(feedbacks);
-	}
+		self.setFeedbackDefinitions(feedbacks)
+	},
 }

@@ -1,6 +1,6 @@
-const { Regex } = require('@companion-module/base')
+import { Regex } from '@companion-module/base'
 
-module.exports = {
+export default {
 	getConfigFields() {
 		return [
 			{
@@ -8,14 +8,14 @@ module.exports = {
 				id: 'info',
 				label: 'Information',
 				width: 12,
-				value: 'This module controls TP-Link Tapo Smart Plugs and Bulbs.'
+				value: 'This module controls TP-Link Tapo Smart Plugs and Bulbs.',
 			},
 			{
 				type: 'textinput',
 				id: 'host',
 				label: 'Plug IP',
 				width: 4,
-				regex: Regex.IP
+				regex: Regex.IP,
 			},
 			{
 				type: 'static-text',
@@ -36,7 +36,7 @@ module.exports = {
 				id: 'password',
 				label: 'Password',
 				width: 3,
-				default: '1234567'
+				default: '1234567',
 			},
 			{
 				type: 'static-text',
@@ -50,7 +50,7 @@ module.exports = {
 				id: 'enable_polling',
 				label: 'Enable Polling',
 				width: 12,
-				default: false
+				default: false,
 			},
 			{
 				type: 'static-text',
@@ -58,7 +58,7 @@ module.exports = {
 				width: 12,
 				label: 'Update Interval',
 				value: 'Please enter the amount of time in milliseconds to request new information from the plug.',
-				isVisible: (config) => config.enable_polling === true
+				isVisible: (config) => config.enable_polling === true,
 			},
 			{
 				type: 'number',
@@ -68,7 +68,7 @@ module.exports = {
 				default: 1000,
 				min: 100,
 				max: 60000,
-				isVisible: (config) => config.enable_polling == true
+				isVisible: (config) => config.enable_polling == true,
 			},
 			{
 				type: 'static-text',
@@ -82,14 +82,15 @@ module.exports = {
 				id: 'info2',
 				label: 'Verbose Logging',
 				width: 12,
-				value: 'Enabling this option will put more detail in the log, which can be useful for troubleshooting purposes.'
+				value:
+					'Enabling this option will put more detail in the log, which can be useful for troubleshooting purposes.',
 			},
 			{
 				type: 'checkbox',
 				id: 'verbose',
 				label: 'Enable Verbose Logging',
-				default: false
+				default: false,
 			},
 		]
-	}
+	},
 }

@@ -1,9 +1,9 @@
-const { combineRgb } = require('@companion-module/base');
+import { combineRgb } from '@companion-module/base'
 
-module.exports = {
+export default {
 	initPresets: function () {
-		let self = this;
-		let presets = [];
+		let self = this
+		let presets = []
 
 		const foregroundColor = combineRgb(255, 255, 255) // White
 		const backgroundColorRed = combineRgb(255, 0, 0) // Red
@@ -26,24 +26,24 @@ module.exports = {
 				{
 					down: [
 						{
-							actionId: 'on'
-						}
+							actionId: 'on',
+						},
 					],
-					up: []
-				}
+					up: [],
+				},
 			],
 			feedbacks: [
 				{
 					feedbackId: 'powerState',
 					options: {
-						option: 1
+						option: 1,
 					},
 					style: {
 						color: foregroundColor,
-						bgcolor: backgroundColorRed
-					}
-				}
-			]
+						bgcolor: backgroundColorRed,
+					},
+				},
+			],
 		})
 
 		presets.push({
@@ -60,26 +60,26 @@ module.exports = {
 				{
 					down: [
 						{
-							actionId: 'off'
-						}
+							actionId: 'off',
+						},
 					],
-					up: []
-				}
+					up: [],
+				},
 			],
 			feedbacks: [
 				{
 					feedbackId: 'powerState',
 					options: {
-						option: 0
+						option: 0,
 					},
 					style: {
 						color: foregroundColor,
-						bgcolor: backgroundColorRed
-					}
-				}
-			]
+						bgcolor: backgroundColorRed,
+					},
+				},
+			],
 		})
-	
-		self.setPresetDefinitions(presets);
-	}
+
+		self.setPresetDefinitions(presets)
+	},
 }

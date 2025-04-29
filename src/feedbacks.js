@@ -2,7 +2,10 @@
 
 import { combineRgb } from '@companion-module/base'
 
-export function initFeedbacks(self) {
+/**
+ * @param {import('./api.js').TapiApi} api
+ */
+export function initFeedbacks(api) {
 	/** @type {import('@companion-module/base').CompanionFeedbackDefinitions} */
 	let feedbacks = {}
 
@@ -32,8 +35,8 @@ export function initFeedbacks(self) {
 		callback: (feedback) => {
 			let opt = feedback.options
 
-			if (self.PLUGINFO) {
-				let plug_state = self.PLUGINFO.device_on
+			if (api.PLUGINFO) {
+				let plug_state = api.PLUGINFO.device_on
 
 				if (plug_state == opt.option) {
 					return true
@@ -44,5 +47,5 @@ export function initFeedbacks(self) {
 		},
 	}
 
-	self.setFeedbackDefinitions(feedbacks)
+	return feedbacks
 }

@@ -9,44 +9,16 @@ import { initFeedbacks } from './feedbacks.js'
 import { initVariables, checkVariables } from './variables.js'
 import { initPresets } from './presets.js'
 
-import utils from './utils.js'
+import { TapiApi } from './api.js'
 
-class TapoInstance extends InstanceBase {
+export class TapoInstance extends InstanceBase {
+	/** @type {NodeJS.Timeout | null} */
+	INTERVAL = null
+
+	API = new TapiApi()
+
 	constructor(internal) {
 		super(internal)
-
-		// Assign the methods from the listed files to this class
-		Object.assign(this, {
-			...utils,
-		})
-
-		this.INTERVAL = null //used for polling device
-
-		this.PLUGINFO = {
-			device_id: '',
-			fw_ver: '',
-			hw_ver: '',
-			model: '',
-			mac: '',
-
-			hw_id: '',
-			fw_id: '',
-			oem_id: '',
-
-			on_time: '',
-			overheated: false,
-			nickname: '',
-			location: '',
-
-			latitude: '',
-			longitude: '',
-
-			ssid: '',
-			signal_level: '',
-			rssi: '',
-
-			device_on: false,
-		}
 
 		this.DEVICE = null
 	}
@@ -64,12 +36,12 @@ class TapoInstance extends InstanceBase {
 
 		this.updateStatus(InstanceStatus.Connecting)
 
-		this.initLogin()
+		this.API.initLogin(this.config)
 
-		initActions(this)
-		initFeedbacks(this)
-		initVariables(this)
-		initPresets(this)
+		this.setActionDefinitions(initActions(this.API))
+		this.setFeedbackDefinitions(initFeedbacks(this.API))
+		this.setVariableDefinitions(initVariables())
+		this.setPresetDefinitions(initPresets())
 
 		this.checkVariables()
 		this.checkFeedbacks()
@@ -80,7 +52,35 @@ class TapoInstance extends InstanceBase {
 	}
 
 	checkVariables() {
-		checkVariables(this)
+		this.setVariableValues(checkVariables(this.API, this))
+	}
+
+	setupInterval() {
+		if (this.INTERVAL !== null) {
+			clearInterval(this.INTERVAL)
+			this.INTERVAL = null
+		}
+
+		this.config.interval = parseInt(this.config.interval) || 500
+
+		if (this.config.enable_polling) {
+			this.log('info', 'Starting Update Interval.')
+			this.INTERVAL = setInterval(() => this.API.getInformation(), this.config.interval)
+		}
+	}
+
+	stopInterval() {
+		this.log('info', 'Stopping Update Interval.')
+
+		if (this.INTERVAL) {
+			clearInterval(this.INTERVAL)
+			this.INTERVAL = null
+		}
+	}
+
+	restartInterval() {
+		this.updateStatus(InstanceStatus.Ok)
+		this.setupInterval()
 	}
 }
 

@@ -1,6 +1,6 @@
 // @ts-check
 
-export function initVariables(self) {
+export function initVariables() {
 	/** @type {import('@companion-module/base').CompanionVariableDefinition[]} */
 	let variables = []
 
@@ -28,40 +28,44 @@ export function initVariables(self) {
 
 	variables.push({ variableId: 'power_state', name: 'Power State' })
 
-	self.setVariableDefinitions(variables)
+	return variables
 }
 
-export function checkVariables(self) {
+/**
+ * @param {import('./api.js').TapiApi} api
+ */
+export function checkVariables(api, instance) {
 	try {
 		/** @type {import('@companion-module/base').CompanionVariableValues} */
 		let variableObj = {}
 
-		variableObj['device_id'] = self.PLUGINFO.device_id
-		variableObj['fw_ver'] = self.PLUGINFO.fw_ver
-		variableObj['hw_ver'] = self.PLUGINFO.hw_ver
-		variableObj['model'] = self.PLUGINFO.model
-		variableObj['mac'] = self.PLUGINFO.mac
+		variableObj['device_id'] = api.PLUGINFO.device_id
+		variableObj['fw_ver'] = api.PLUGINFO.fw_ver
+		variableObj['hw_ver'] = api.PLUGINFO.hw_ver
+		variableObj['model'] = api.PLUGINFO.model
+		variableObj['mac'] = api.PLUGINFO.mac
 
-		variableObj['hw_id'] = self.PLUGINFO.hw_id
-		variableObj['fw_id'] = self.PLUGINFO.fw_id
-		variableObj['oem_id'] = self.PLUGINFO.oem_id
+		variableObj['hw_id'] = api.PLUGINFO.hw_id
+		variableObj['fw_id'] = api.PLUGINFO.fw_id
+		variableObj['oem_id'] = api.PLUGINFO.oem_id
 
-		variableObj['on_time'] = self.PLUGINFO.on_time
-		variableObj['overheated'] = self.PLUGINFO.overheated == true ? 'Yes' : 'No'
-		variableObj['nickname'] = self.PLUGINFO.nickname
-		variableObj['location'] = self.PLUGINFO.location
+		variableObj['on_time'] = api.PLUGINFO.on_time
+		variableObj['overheated'] = api.PLUGINFO.overheated == true ? 'Yes' : 'No'
+		variableObj['nickname'] = api.PLUGINFO.nickname
+		variableObj['location'] = api.PLUGINFO.location
 
-		variableObj['latitude'] = self.PLUGINFO.latitude
-		variableObj['longitude'] = self.PLUGINFO.longitude
+		variableObj['latitude'] = api.PLUGINFO.latitude
+		variableObj['longitude'] = api.PLUGINFO.longitude
 
-		variableObj['ssid'] = self.PLUGINFO.ssid
-		variableObj['signal_level'] = self.PLUGINFO.signal_level
-		variableObj['rssi'] = self.PLUGINFO.rssi
+		variableObj['ssid'] = api.PLUGINFO.ssid
+		variableObj['signal_level'] = api.PLUGINFO.signal_level
+		variableObj['rssi'] = api.PLUGINFO.rssi
 
-		variableObj['power_state'] = self.PLUGINFO.device_on == true ? 'On' : 'Off'
+		variableObj['power_state'] = api.PLUGINFO.device_on == true ? 'On' : 'Off'
 
-		self.setVariableValues(variableObj)
+		return variableObj
 	} catch (error) {
-		self.log('error', 'Error Setting Variables: ' + String(error))
+		instance.log('error', 'Error Setting Variables: ' + String(error))
+		return {}
 	}
 }

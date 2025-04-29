@@ -2,7 +2,7 @@
 
 import { combineRgb } from '@companion-module/base'
 
-export function initPresets(self) {
+export function initPresets() {
 	/** @type {import('@companion-module/base').CompanionPresetDefinitions} */
 	let presets = {}
 
@@ -83,5 +83,5 @@ export function initPresets(self) {
 		],
 	}
 
-	self.setPresetDefinitions(presets)
+	return presets
 }

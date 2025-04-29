@@ -1,6 +1,9 @@
 // @ts-check
 
-export function initActions(self) {
+/**
+ * @param {import('./api.js').TapiApi} api
+ */
+export function initActions(api) {
 	/** @type {import('@companion-module/base').CompanionActionDefinitions} */
 	let actions = {}
 
@@ -8,7 +11,7 @@ export function initActions(self) {
 		name: 'Power On',
 		options: [],
 		callback: () => {
-			self.power(1)
+			api.power(1)
 		},
 	}
 
@@ -16,7 +19,7 @@ export function initActions(self) {
 		name: 'Power Off',
 		options: [],
 		callback: () => {
-			self.power(0)
+			api.power(0)
 		},
 	}
 
@@ -24,10 +27,10 @@ export function initActions(self) {
 		name: 'Toggle Power',
 		options: [],
 		callback: () => {
-			if (self.PLUGINFO.device_on == 1) {
-				self.power(0)
+			if (api.PLUGINFO.device_on) {
+				api.power(0)
 			} else {
-				self.power(1)
+				api.power(1)
 			}
 		},
 	}
@@ -47,7 +50,7 @@ export function initActions(self) {
 			},
 		],
 		callback: (action) => {
-			self.setBulbBrightness(action.options.brightness)
+			api.setBulbBrightness(action.options.brightness)
 		},
 	}
 
@@ -71,9 +74,9 @@ export function initActions(self) {
 			},
 		],
 		callback: (action) => {
-			self.setBulbColor(action.options.color)
+			api.setBulbColor(action.options.color)
 		},
 	}
 
-	self.setActionDefinitions(actions)
+	return actions
 }

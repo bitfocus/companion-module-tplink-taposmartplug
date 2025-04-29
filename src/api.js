@@ -1,8 +1,10 @@
-this // @ts-check
+// @ts-check
 
 import { InstanceStatus } from '@companion-module/base'
 
 import TAPO from 'tp-link-tapo-connect'
+
+import { getPlugInfoForDeviceId } from './util.js'
 
 export class TapiApi {
 	config = {}
@@ -13,6 +15,7 @@ export class TapiApi {
 	/** @type {import('./main.js').TapoInstance} */
 	INSTANCE
 
+	/** @type {TAPO.TapoDeviceInfo | null} */
 	PLUGINFO = {
 		device_id: '',
 		fw_ver: '',
@@ -39,6 +42,9 @@ export class TapiApi {
 		device_on: false,
 	}
 
+	/** @type {TAPO.TapoDeviceInfo[]} */
+	CHILDPLUGS = []
+
 	constructor(instance) {
 		this.INSTANCE = instance
 	}
@@ -46,11 +52,25 @@ export class TapiApi {
 	async initLogin(config) {
 		this.config = config
 
+		const hadChildren = this.CHILDPLUGS.length > 0
+
+		// Clear old device
+		this.DEVICE = null
+		this.PLUGINFO = null
+		this.CHILDPLUGS = []
+
+		this.INSTANCE.deviceInfoUpdated(hadChildren)
+
 		if (this.config.host) {
+			// try {
+			// 	const cloudApi = await TAPO.cloudLogin(this.config.email, this.config.password)
+			// 	const devices = await cloudApi.listDevices()
+			// 	console.log('all cloud devices', devices)
+			// } catch (e) {
+			// 	console.log('Failed to list devices from cloud api')
+			// }
+
 			try {
-				const cloudApi = await TAPO.cloudLogin(this.config.email, this.config.password)
-				const devices = await cloudApi.listDevices()
-				console.log(devices)
 				this.DEVICE = await TAPO.loginDeviceByIp(this.config.email, this.config.password, this.config.host)
 				if (this.DEVICE) {
 					this.INSTANCE.updateStatus(InstanceStatus.Ok)
@@ -78,7 +98,17 @@ export class TapiApi {
 
 		try {
 			let data = await this.DEVICE.getDeviceInfo()
-			this.updateData(data)
+			let children = await this.DEVICE.getChildDevicesInfo()
+			console.log('Got new device data with %d children', children.length)
+
+			this.INSTANCE.updateStatus(InstanceStatus.Ok)
+
+			const hasChildrenChanged = children.length !== this.CHILDPLUGS.length
+
+			this.PLUGINFO = data
+			this.CHILDPLUGS = children
+
+			this.INSTANCE.deviceInfoUpdated(hasChildrenChanged)
 		} catch (error) {
 			this.handleError(error)
 		}
@@ -117,61 +147,33 @@ export class TapiApi {
 		}
 	}
 
-	updateData(data) {
-		this.INSTANCE.updateStatus(InstanceStatus.Ok)
-
-		try {
-			this.PLUGINFO.device_id = data.device_id
-			this.PLUGINFO.fw_ver = data.fw_ver
-			this.PLUGINFO.hw_ver = data.hw_ver
-			this.PLUGINFO.model = data.model
-			this.PLUGINFO.mac = data.mac
-
-			this.PLUGINFO.hw_id = data.hw_id
-			this.PLUGINFO.fw_id = data.fw_id
-			this.PLUGINFO.oem_id = data.oem_id
-
-			this.PLUGINFO.on_time = data.on_time
-			this.PLUGINFO.overheated = data.overheated
-			this.PLUGINFO.nickname = data.nickname
-			this.PLUGINFO.location = data.location
-
-			this.PLUGINFO.latitude = data.latitude
-			this.PLUGINFO.longitude = data.longitude
-
-			this.PLUGINFO.ssid = data.ssid
-			this.PLUGINFO.signal_level = data.signal_level
-			this.PLUGINFO.rssi = data.rssi
-
-			this.PLUGINFO.device_on = data.device_on
-
-			this.INSTANCE.checkFeedbacks()
-			this.INSTANCE.checkVariables()
-		} catch (error) {
-			//error setting data
-			console.log('error settting data')
-			console.log(error)
-		}
-	}
-
 	/**
 	 *
-	 * @param {0 | 1} powerState
+	 * @param {0 | 1 | null} powerState
+	 * @param {import('@companion-module/base').InputValue | undefined} deviceId
 	 */
-	async power(powerState) {
+	async power(powerState, deviceId) {
 		if (!this.DEVICE) {
 			this.INSTANCE.log('error', 'Device not connected')
 			return
 		}
 
+		const plugInfo = getPlugInfoForDeviceId(this, deviceId)
+		if (!plugInfo) {
+			this.INSTANCE.log('error', `Child device "${deviceId}" not found`)
+			return
+		}
+
 		try {
-			let plugName = this.PLUGINFO.nickname
+			let plugName = plugInfo?.nickname || ''
 			this.INSTANCE.log('info', `Setting ${plugName} Power State to: ${powerState ? 'On' : 'Off'}`)
 
+			if (powerState === null) powerState = plugInfo.device_on ? 0 : 1
+
 			if (powerState == 1) {
-				await this.DEVICE.turnOn()
+				await this.DEVICE.turnOn(plugInfo.device_id)
 			} else {
-				await this.DEVICE.turnOff()
+				await this.DEVICE.turnOff(plugInfo.device_id)
 			}
 
 			if (this.INSTANCE.INTERVAL == null) {
@@ -190,7 +192,7 @@ export class TapiApi {
 		}
 
 		try {
-			let plugName = this.PLUGINFO.nickname
+			let plugName = this.PLUGINFO?.nickname || ''
 			this.INSTANCE.log('info', `Setting ${plugName} Bulb Brightness to: ${brightness}`)
 
 			await this.DEVICE.setBrightness(brightness)
@@ -211,7 +213,7 @@ export class TapiApi {
 		}
 
 		try {
-			let plugName = this.PLUGINFO.nickname
+			let plugName = this.PLUGINFO?.nickname || ''
 			this.INSTANCE.log('info', `Setting ${plugName} Bulb Color to: ${color}`)
 
 			await this.DEVICE.setColour(color)

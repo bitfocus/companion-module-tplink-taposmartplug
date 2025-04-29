@@ -1,6 +1,9 @@
 // @ts-check
 
-export function initVariables() {
+/**
+ * @param {import('./api.js').TapiApi} api
+ */
+export function initVariables(api) {
 	/** @type {import('@companion-module/base').CompanionVariableDefinition[]} */
 	let variables = []
 
@@ -28,6 +31,11 @@ export function initVariables() {
 
 	variables.push({ variableId: 'power_state', name: 'Power State' })
 
+	api.CHILDPLUGS.forEach((child, index) => {
+		variables.push({ variableId: `nickname_${index + 1}`, name: `Nickname - Child ${index + 1}` })
+		variables.push({ variableId: `power_state_${index + 1}`, name: `Power State - Child ${index + 1}` })
+	})
+
 	return variables
 }
 
@@ -39,29 +47,34 @@ export function checkVariables(api, instance) {
 		/** @type {import('@companion-module/base').CompanionVariableValues} */
 		let variableObj = {}
 
-		variableObj['device_id'] = api.PLUGINFO.device_id
-		variableObj['fw_ver'] = api.PLUGINFO.fw_ver
-		variableObj['hw_ver'] = api.PLUGINFO.hw_ver
-		variableObj['model'] = api.PLUGINFO.model
-		variableObj['mac'] = api.PLUGINFO.mac
+		variableObj['device_id'] = api.PLUGINFO?.device_id ?? ''
+		variableObj['fw_ver'] = api.PLUGINFO?.fw_ver ?? ''
+		variableObj['hw_ver'] = api.PLUGINFO?.hw_ver ?? ''
+		variableObj['model'] = api.PLUGINFO?.model ?? ''
+		variableObj['mac'] = api.PLUGINFO?.mac ?? ''
 
-		variableObj['hw_id'] = api.PLUGINFO.hw_id
-		variableObj['fw_id'] = api.PLUGINFO.fw_id
-		variableObj['oem_id'] = api.PLUGINFO.oem_id
+		variableObj['hw_id'] = api.PLUGINFO?.hw_id ?? ''
+		variableObj['fw_id'] = api.PLUGINFO?.fw_id ?? ''
+		variableObj['oem_id'] = api.PLUGINFO?.oem_id ?? ''
 
-		variableObj['on_time'] = api.PLUGINFO.on_time
-		variableObj['overheated'] = api.PLUGINFO.overheated == true ? 'Yes' : 'No'
-		variableObj['nickname'] = api.PLUGINFO.nickname
-		variableObj['location'] = api.PLUGINFO.location
+		variableObj['on_time'] = api.PLUGINFO?.on_time ?? ''
+		variableObj['overheated'] = api.PLUGINFO?.overheated == true ? 'Yes' : 'No'
+		variableObj['nickname'] = api.PLUGINFO?.nickname ?? ''
+		variableObj['location'] = api.PLUGINFO?.location ?? ''
 
-		variableObj['latitude'] = api.PLUGINFO.latitude
-		variableObj['longitude'] = api.PLUGINFO.longitude
+		variableObj['latitude'] = api.PLUGINFO?.latitude ?? ''
+		variableObj['longitude'] = api.PLUGINFO?.longitude ?? ''
 
-		variableObj['ssid'] = api.PLUGINFO.ssid
-		variableObj['signal_level'] = api.PLUGINFO.signal_level
-		variableObj['rssi'] = api.PLUGINFO.rssi
+		variableObj['ssid'] = api.PLUGINFO?.ssid ?? ''
+		variableObj['signal_level'] = api.PLUGINFO?.signal_level ?? ''
+		variableObj['rssi'] = api.PLUGINFO?.rssi ?? ''
 
-		variableObj['power_state'] = api.PLUGINFO.device_on == true ? 'On' : 'Off'
+		variableObj['power_state'] = api.PLUGINFO?.device_on == true ? 'On' : 'Off'
+
+		api.CHILDPLUGS.forEach((child, index) => {
+			variableObj[`nickname_${index + 1}`] = child.nickname ?? ''
+			variableObj[`power_state_${index + 1}`] = child.device_on == true ? 'On' : 'Off'
+		})
 
 		return variableObj
 	} catch (error) {

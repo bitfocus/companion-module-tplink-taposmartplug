@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@companion-module/base": "^1.11.3",
-		"tp-link-tapo-connect": "^2.0.7"
+		"tp-link-tapo-connect": "npm:@julusian/tp-link-tapo-connect@2.1.0-0"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.3.0"

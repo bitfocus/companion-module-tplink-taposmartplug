@@ -15,7 +15,7 @@ export class TapoInstance extends InstanceBase {
 	/** @type {NodeJS.Timeout | null} */
 	INTERVAL = null
 
-	API = new TapiApi()
+	API = new TapiApi(this)
 
 	constructor(internal) {
 		super(internal)
@@ -38,10 +38,16 @@ export class TapoInstance extends InstanceBase {
 
 		this.API.initLogin(this.config)
 
-		this.setActionDefinitions(initActions(this.API))
-		this.setFeedbackDefinitions(initFeedbacks(this.API))
-		this.setVariableDefinitions(initVariables())
-		this.setPresetDefinitions(initPresets())
+		this.deviceInfoUpdated(true)
+	}
+
+	deviceInfoUpdated(hasChildCountChanged) {
+		if (hasChildCountChanged) {
+			this.setActionDefinitions(initActions(this.API))
+			this.setFeedbackDefinitions(initFeedbacks(this.API))
+			this.setVariableDefinitions(initVariables(this.API))
+			this.setPresetDefinitions(initPresets())
+		}
 
 		this.checkVariables()
 		this.checkFeedbacks()

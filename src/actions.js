@@ -1,37 +1,37 @@
 // @ts-check
 
+import { getChildOptionFields } from './util.js'
+
 /**
  * @param {import('./api.js').TapiApi} api
  */
 export function initActions(api) {
+	const childrenFields = getChildOptionFields(api)
+
 	/** @type {import('@companion-module/base').CompanionActionDefinitions} */
 	let actions = {}
 
 	actions.on = {
 		name: 'Power On',
-		options: [],
-		callback: () => {
-			api.power(1)
+		options: [...childrenFields],
+		callback: (action) => {
+			api.power(1, action.options.child)
 		},
 	}
 
 	actions.off = {
 		name: 'Power Off',
-		options: [],
-		callback: () => {
-			api.power(0)
+		options: [...childrenFields],
+		callback: (action) => {
+			api.power(0, action.options.child)
 		},
 	}
 
 	actions.toggle = {
 		name: 'Toggle Power',
-		options: [],
-		callback: () => {
-			if (api.PLUGINFO.device_on) {
-				api.power(0)
-			} else {
-				api.power(1)
-			}
+		options: [...childrenFields],
+		callback: (action) => {
+			api.power(null, action.options.child)
 		},
 	}
 

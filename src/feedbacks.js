@@ -1,11 +1,14 @@
 // @ts-check
 
 import { combineRgb } from '@companion-module/base'
+import { getChildOptionFields, getPlugInfoForDeviceId } from './util.js'
 
 /**
  * @param {import('./api.js').TapiApi} api
  */
 export function initFeedbacks(api) {
+	const childrenFields = getChildOptionFields(api)
+
 	/** @type {import('@companion-module/base').CompanionFeedbackDefinitions} */
 	let feedbacks = {}
 
@@ -21,6 +24,7 @@ export function initFeedbacks(api) {
 			bgcolor: backgroundColorRed,
 		},
 		options: [
+			...childrenFields,
 			{
 				type: 'dropdown',
 				label: 'Indicate in X State',
@@ -35,15 +39,10 @@ export function initFeedbacks(api) {
 		callback: (feedback) => {
 			let opt = feedback.options
 
-			if (api.PLUGINFO) {
-				let plug_state = api.PLUGINFO.device_on
+			const plugInfo = getPlugInfoForDeviceId(api, opt.child)
+			if (!plugInfo) return false
 
-				if (plug_state == opt.option) {
-					return true
-				}
-			}
-
-			return false
+			return plugInfo.device_on == Number(opt.option) > 0
 		},
 	}
 

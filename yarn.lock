@@ -1653,16 +1653,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tp-link-tapo-connect@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "tp-link-tapo-connect@npm:2.0.7"
+"tp-link-tapo-connect@npm:@julusian/tp-link-tapo-connect@2.1.0-0":
+  version: 2.1.0-0
+  resolution: "@julusian/tp-link-tapo-connect@npm:2.1.0-0"
   dependencies:
     "@network-utils/arp-lookup": "npm:^2.1.0"
     axios: "npm:^0.21.4"
     local-devices: "npm:^4.0.0"
     macaddr: "npm:^0.1.1"
     uuid: "npm:^8.3.2"
-  checksum: 10c0/daa6e9ac5cd720ff0c2517c6c1634e6a9208356353e450cd5f280c82e04fc79ff6f054129d25c1a483073643a7d26e1a666b74ce499e0e726c5915fa4e1e5dc4
+  checksum: 10c0/a62428c37c5747b3cb8d73ec963a41e392a6534e8b3dc49ee0281dd221fc22fc9eba3c97a9ec156c8f0891d865389a709795e1d8a53faf3b3d4f55575986da5f
   languageName: node
   linkType: hard
 
@@ -1672,7 +1672,7 @@ __metadata:
   dependencies:
     "@companion-module/base": "npm:^1.11.3"
     "@companion-module/tools": "npm:^2.3.0"
-    tp-link-tapo-connect: "npm:^2.0.7"
+    tp-link-tapo-connect: "npm:@julusian/tp-link-tapo-connect@2.1.0-0"
   languageName: unknown
   linkType: soft
 

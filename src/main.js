@@ -2,13 +2,12 @@
 // @ts-check
 
 import { InstanceBase, InstanceStatus, runEntrypoint } from '@companion-module/base'
-import UpgradeScripts from './upgrades.js'
-
-import config from './config.js'
-import actions from './actions.js'
-import feedbacks from './feedbacks.js'
-import variables from './variables.js'
-import presets from './presets.js'
+import { UpgradeScripts } from './upgrades.js'
+import { getConfigFields } from './config.js'
+import { initActions } from './actions.js'
+import { initFeedbacks } from './feedbacks.js'
+import { initVariables, checkVariables } from './variables.js'
+import { initPresets } from './presets.js'
 
 import utils from './utils.js'
 
@@ -18,11 +17,6 @@ class TapoInstance extends InstanceBase {
 
 		// Assign the methods from the listed files to this class
 		Object.assign(this, {
-			...config,
-			...actions,
-			...feedbacks,
-			...variables,
-			...presets,
 			...utils,
 		})
 
@@ -68,17 +62,25 @@ class TapoInstance extends InstanceBase {
 	async configUpdated(config) {
 		this.config = config
 
-		this.updateStatus(InstanceStatus.Connecting, 'Connecting to device...')
+		this.updateStatus(InstanceStatus.Connecting)
 
 		this.initLogin()
 
-		this.initActions()
-		this.initFeedbacks()
-		this.initVariables()
-		this.initPresets()
+		initActions(this)
+		initFeedbacks(this)
+		initVariables(this)
+		initPresets(this)
 
 		this.checkVariables()
 		this.checkFeedbacks()
+	}
+
+	getConfigFields() {
+		return getConfigFields()
+	}
+
+	checkVariables() {
+		checkVariables(this)
 	}
 }
 

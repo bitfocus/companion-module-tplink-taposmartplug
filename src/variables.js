@@ -1,68 +1,67 @@
-export default {
-	initVariables: function () {
-		let self = this
-		let variables = []
+// @ts-check
 
-		variables.push({ variableId: 'device_id', name: 'Device ID' })
-		variables.push({ variableId: 'fw_ver', name: 'FW Version' })
-		variables.push({ variableId: 'hw_ver', name: 'HW Version' })
-		variables.push({ variableId: 'model', name: 'Model' })
-		variables.push({ variableId: 'mac', name: 'MAC Address' })
+export function initVariables(self) {
+	/** @type {import('@companion-module/base').CompanionVariableDefinition[]} */
+	let variables = []
 
-		variables.push({ variableId: 'hw_id', name: 'HW ID' })
-		variables.push({ variableId: 'fw_id', name: 'FW ID' })
-		variables.push({ variableId: 'oem_id', name: 'OEM ID' })
+	variables.push({ variableId: 'device_id', name: 'Device ID' })
+	variables.push({ variableId: 'fw_ver', name: 'FW Version' })
+	variables.push({ variableId: 'hw_ver', name: 'HW Version' })
+	variables.push({ variableId: 'model', name: 'Model' })
+	variables.push({ variableId: 'mac', name: 'MAC Address' })
 
-		variables.push({ variableId: 'on_time', name: 'On Time' })
-		variables.push({ variableId: 'overheated', name: 'Overheated' })
-		variables.push({ variableId: 'nickname', name: 'Nickname' })
-		variables.push({ variableId: 'location', name: 'Location' })
+	variables.push({ variableId: 'hw_id', name: 'HW ID' })
+	variables.push({ variableId: 'fw_id', name: 'FW ID' })
+	variables.push({ variableId: 'oem_id', name: 'OEM ID' })
 
-		variables.push({ variableId: 'latitude', name: 'Latitude' })
-		variables.push({ variableId: 'longitude', name: 'Longitude' })
+	variables.push({ variableId: 'on_time', name: 'On Time' })
+	variables.push({ variableId: 'overheated', name: 'Overheated' })
+	variables.push({ variableId: 'nickname', name: 'Nickname' })
+	variables.push({ variableId: 'location', name: 'Location' })
 
-		variables.push({ variableId: 'ssid', name: 'SSID' })
-		variables.push({ variableId: 'signal_level', name: 'Signal Level' })
-		variables.push({ variableId: 'rssi', name: 'RSSI' })
+	variables.push({ variableId: 'latitude', name: 'Latitude' })
+	variables.push({ variableId: 'longitude', name: 'Longitude' })
 
-		variables.push({ variableId: 'power_state', name: 'Power State' })
+	variables.push({ variableId: 'ssid', name: 'SSID' })
+	variables.push({ variableId: 'signal_level', name: 'Signal Level' })
+	variables.push({ variableId: 'rssi', name: 'RSSI' })
 
-		self.setVariableDefinitions(variables)
-	},
+	variables.push({ variableId: 'power_state', name: 'Power State' })
 
-	checkVariables: function () {
-		let self = this
+	self.setVariableDefinitions(variables)
+}
 
-		try {
-			let variableObj = {}
+export function checkVariables(self) {
+	try {
+		/** @type {import('@companion-module/base').CompanionVariableValues} */
+		let variableObj = {}
 
-			variableObj['device_id'] = self.PLUGINFO.device_id
-			variableObj['fw_ver'] = self.PLUGINFO.fw_ver
-			variableObj['hw_ver'] = self.PLUGINFO.hw_ver
-			variableObj['model'] = self.PLUGINFO.model
-			variableObj['mac'] = self.PLUGINFO.mac
+		variableObj['device_id'] = self.PLUGINFO.device_id
+		variableObj['fw_ver'] = self.PLUGINFO.fw_ver
+		variableObj['hw_ver'] = self.PLUGINFO.hw_ver
+		variableObj['model'] = self.PLUGINFO.model
+		variableObj['mac'] = self.PLUGINFO.mac
 
-			variableObj['hw_id'] = self.PLUGINFO.hw_id
-			variableObj['fw_id'] = self.PLUGINFO.fw_id
-			variableObj['oem_id'] = self.PLUGINFO.oem_id
+		variableObj['hw_id'] = self.PLUGINFO.hw_id
+		variableObj['fw_id'] = self.PLUGINFO.fw_id
+		variableObj['oem_id'] = self.PLUGINFO.oem_id
 
-			variableObj['on_time'] = self.PLUGINFO.on_time
-			variableObj['overheated'] = self.PLUGINFO.overheated == true ? 'Yes' : 'No'
-			variableObj['nickname'] = self.PLUGINFO.nickname
-			variableObj['location'] = self.PLUGINFO.location
+		variableObj['on_time'] = self.PLUGINFO.on_time
+		variableObj['overheated'] = self.PLUGINFO.overheated == true ? 'Yes' : 'No'
+		variableObj['nickname'] = self.PLUGINFO.nickname
+		variableObj['location'] = self.PLUGINFO.location
 
-			variableObj['latitude'] = self.PLUGINFO.latitude
-			variableObj['longitude'] = self.PLUGINFO.longitude
+		variableObj['latitude'] = self.PLUGINFO.latitude
+		variableObj['longitude'] = self.PLUGINFO.longitude
 
-			variableObj['ssid'] = self.PLUGINFO.ssid
-			variableObj['signal_level'] = self.PLUGINFO.signal_level
-			variableObj['rssi'] = self.PLUGINFO.rssi
+		variableObj['ssid'] = self.PLUGINFO.ssid
+		variableObj['signal_level'] = self.PLUGINFO.signal_level
+		variableObj['rssi'] = self.PLUGINFO.rssi
 
-			variableObj['power_state'] = self.PLUGINFO.device_on == true ? 'On' : 'Off'
+		variableObj['power_state'] = self.PLUGINFO.device_on == true ? 'On' : 'Off'
 
-			self.setVariableValues(variableObj)
-		} catch (error) {
-			self.log('error', 'Error Setting Variables: ' + String(error))
-		}
-	},
+		self.setVariableValues(variableObj)
+	} catch (error) {
+		self.log('error', 'Error Setting Variables: ' + String(error))
+	}
 }

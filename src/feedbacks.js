@@ -1,48 +1,48 @@
+// @ts-check
+
 import { combineRgb } from '@companion-module/base'
 
-export default {
-	initFeedbacks: function () {
-		let self = this
-		let feedbacks = {}
+export function initFeedbacks(self) {
+	/** @type {import('@companion-module/base').CompanionFeedbackDefinitions} */
+	let feedbacks = {}
 
-		const foregroundColor = combineRgb(255, 255, 255) // White
-		const backgroundColorRed = combineRgb(255, 0, 0) // Red
+	const foregroundColor = combineRgb(255, 255, 255) // White
+	const backgroundColorRed = combineRgb(255, 0, 0) // Red
 
-		feedbacks.powerState = {
-			type: 'boolean',
-			name: 'Power State',
-			description: 'Indicate if Plug is On or Off',
-			style: {
-				color: foregroundColor,
-				bgcolor: backgroundColorRed,
+	feedbacks.powerState = {
+		type: 'boolean',
+		name: 'Power State',
+		description: 'Indicate if Plug is On or Off',
+		defaultStyle: {
+			color: foregroundColor,
+			bgcolor: backgroundColorRed,
+		},
+		options: [
+			{
+				type: 'dropdown',
+				label: 'Indicate in X State',
+				id: 'option',
+				default: 1,
+				choices: [
+					{ id: 0, label: 'Off' },
+					{ id: 1, label: 'On' },
+				],
 			},
-			options: [
-				{
-					type: 'dropdown',
-					label: 'Indicate in X State',
-					id: 'option',
-					default: 1,
-					choices: [
-						{ id: 0, label: 'Off' },
-						{ id: 1, label: 'On' },
-					],
-				},
-			],
-			callback: function (feedback, bank) {
-				let opt = feedback.options
+		],
+		callback: (feedback) => {
+			let opt = feedback.options
 
-				if (self.PLUGINFO) {
-					let plug_state = self.PLUGINFO.device_on
+			if (self.PLUGINFO) {
+				let plug_state = self.PLUGINFO.device_on
 
-					if (plug_state == opt.option) {
-						return true
-					}
+				if (plug_state == opt.option) {
+					return true
 				}
+			}
 
-				return false
-			},
-		}
+			return false
+		},
+	}
 
-		self.setFeedbackDefinitions(feedbacks)
-	},
+	self.setFeedbackDefinitions(feedbacks)
 }

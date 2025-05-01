@@ -125,21 +125,18 @@ export class TapiApi {
 		console.log(error)
 
 		try {
-			Object.keys(err).forEach(function (key) {
-				if (key === 'code') {
-					switch (err[key]) {
-						case 'ECONNREFUSED':
-						case 'EHOSTUNREACH':
-						case 'ETIMEDOUT':
-							error =
-								'Unable to communicate with Device. Connection refused. Is this the right IP address? Is it still online?'
-							this.INSTANCE.log('error', error)
-							this.INSTANCE.updateStatus(InstanceStatus.ConnectionFailure)
-							setTimeout(() => this.INSTANCE.restartInterval(), 30000) //restart interval after 30 seconds
-							break
-					}
-				}
-			})
+			const errCode = 'code' in err && err['code']
+			switch (errCode) {
+				case 'ECONNREFUSED':
+				case 'EHOSTUNREACH':
+				case 'ETIMEDOUT':
+					error =
+						'Unable to communicate with Device. Connection refused. Is this the right IP address? Is it still online?'
+					this.INSTANCE.log('error', error)
+					this.INSTANCE.updateStatus(InstanceStatus.ConnectionFailure)
+					setTimeout(() => this.INSTANCE.restartInterval(), 30000) //restart interval after 30 seconds
+					break
+			}
 		} catch (error) {
 			//error handling the error, just show generic error
 			console.log(error)

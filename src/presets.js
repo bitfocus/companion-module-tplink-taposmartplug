@@ -83,5 +83,40 @@ export function initPresets() {
 		],
 	}
 
+	presets['power-toggle'] = {
+		category: 'Power',
+		type: 'button',
+		name: 'Power Toggle',
+		style: {
+			text: 'Power\\nTOGGLE',
+			size: '14',
+			color: 16777215,
+			bgcolor: combineRgb(0, 0, 0),
+		},
+		steps: [
+			{
+				down: [
+					{
+						actionId: 'toggle',
+						options: {},
+					},
+				],
+				up: [],
+			},
+		],
+		feedbacks: [
+			{
+				feedbackId: 'powerState',
+				options: {
+					option: 1,
+				},
+				style: {
+					color: foregroundColor,
+					bgcolor: backgroundColorRed,
+				},
+			},
+		],
+	}
+	
 	return presets
 }

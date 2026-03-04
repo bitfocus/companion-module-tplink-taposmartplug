@@ -42,6 +42,8 @@ export class TapiApi {
 		device_on: false,
 	}
 
+	CHILD_PLUG_MODELS = ['P300','P306','P304M','P316M','H100']
+
 	/** @type {TAPO.TapoDeviceInfo[]} */
 	CHILDPLUGS = []
 
@@ -98,8 +100,13 @@ export class TapiApi {
 
 		try {
 			let data = await this.DEVICE.getDeviceInfo()
-			let children = await this.DEVICE.getChildDevicesInfo()
-			console.log('Got new device data with %d children', children.length)
+			let children = this.CHILDPLUGS
+
+			if (this.CHILD_PLUG_MODELS.includes(data.model)) {
+				console.log('Device has child plugs')
+				children = await this.DEVICE.getChildDevicesInfo()
+				console.log('Got new device data with %d children', children.length)
+			}
 
 			this.INSTANCE.updateStatus(InstanceStatus.Ok)
 
@@ -110,6 +117,7 @@ export class TapiApi {
 
 			this.INSTANCE.deviceInfoUpdated(hasChildrenChanged)
 		} catch (error) {
+			console.log('Error caught getting device information')
 			this.handleError(error)
 		}
 	}
@@ -165,12 +173,15 @@ export class TapiApi {
 			let plugName = plugInfo?.nickname || ''
 			this.INSTANCE.log('info', `Setting ${plugName} Power State to: ${powerState ? 'On' : 'Off'}`)
 
+			// Don't pass device_id for devices that don't have child plugs
+			let powerArgs = this.CHILDPLUGS.length > 0 ? plugInfo.device_id: undefined
+
 			if (powerState === null) powerState = plugInfo.device_on ? 0 : 1
 
 			if (powerState == 1) {
-				await this.DEVICE.turnOn(plugInfo.device_id)
+				await this.DEVICE.turnOn(powerArgs)
 			} else {
-				await this.DEVICE.turnOff(plugInfo.device_id)
+				await this.DEVICE.turnOff(powerArgs)
 			}
 
 			if (this.INSTANCE.INTERVAL == null) {
